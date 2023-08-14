@@ -1,18 +1,3 @@
-"""flower_shop URL Configuration
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/3.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
@@ -23,12 +8,12 @@ from flowers import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.view_flowers, name="ViewFlowers"),
-    path('catalog', views.view_catalog),
-    path('card', views.view_card),
-    path('consultation', views.view_consultation),
-    path('order', views.view_order),
-    path('order-step', views.view_order_step),
-    path('quiz', views.view_quiz),
-    path('quiz-step', views.view_quiz_step),
-    path('result', views.view_result),
+    path('catalog', views.view_catalog, name="ViewCatalog"),
+    path('card', views.view_card, name="ViewCard"),
+    path('consultation', views.view_consultation, name="ViewConsultation"),
+    path('order', views.view_order, name="ViewOrder"),
+    path('order-step', views.view_order_step, name="ViewOrderStep"),
+    path('quiz', views.view_quiz, name="ViewQuiz"),
+    path('quiz-step', views.view_quiz_step, name="ViewQuizStep"),
+    path('result', views.view_result, name="ViewResult"),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'flowers/base.html' %}
 {% load static %}
 {% block content %}
 {% include 'include/nav.html' %}
@@ -8,8 +8,8 @@
 				<div class="order__block">
 					<div class="order_items">
 						<div class="title">Оформление доставки</div>
-						<form action="#" class="order__form">
-							{% csrf_token %}
+						<form action="{% url 'ViewOrderStep' %}" class="order__form">
+<!--							{% csrf_token %}-->
 							<div class="order__form_block ficb">
 								<input type="text" name="fname" class="order__form_input" placeholder="Введите Имя" required>
 								<input type="text" name="tel" class="order__form_input" placeholder="+ 7 (999) 000 00 00" required>
@@ -53,7 +53,7 @@
 				</div>
 			</div>
 		</div>
-		<img src="{% static 'img/orderImg.jpg' %}" alt="orderImg" class="order__img">
+		<img src="{% static 'pictures/orderImg.jpg' %}" alt="orderImg" class="order__img">
 	</section>
 	<script>
 		document.querySelector('input[type=radio]').onclick = function(e) {

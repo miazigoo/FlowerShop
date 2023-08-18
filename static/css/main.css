@@ -84,7 +84,7 @@ input::placeholder {
 }
 
 .mainBg {
-	background: url('/static/img/mainBg.jpg') no-repeat;
+	background: url('/static/pictures/mainBg.jpg') no-repeat;
 	background-size: cover;
 	position: relative;
 }
@@ -171,13 +171,13 @@ bottom: 0;
 	margin-right: 0;
 }
 .recommended__block_first {
-	background: url('/static/img/recommendedBg1.jpg') no-repeat center bottom / cover;
+	background: url('/static/pictures/recommendedBg1.jpg') no-repeat center bottom / cover;
 }
 .recommended__block_sec {
-	background: url('/static/img/recommendedBg2.jpg') no-repeat center bottom / cover;
+	background: url('/static/pictures/recommendedBg2.jpg') no-repeat center bottom / cover;
 }
 .recommended__block_thr {
-	background: url('/static/img/recommendedBg3.jpg') no-repeat center bottom / cover;
+	background: url('/static/pictures/recommendedBg3.jpg') no-repeat center bottom / cover;
 }
 .recommended__block_elems {
 	width: 100%;
@@ -332,16 +332,16 @@ opacity: 0.3;
 	margin-bottom: 10px;
 }
 .recommended__elems_first .recommended__block_sec {
-	background: url('/static/img/catalog/catalogBg1.jpg') no-repeat center bottom / cover;
+	background: url('/static/pictures/catalog/catalogBg1.jpg') no-repeat center bottom / cover;
 }
 .recommended__elems_first .recommended__block_thr {
-	background: url('/static/img/catalog/catalogBg2.jpg') no-repeat center bottom / cover;
+	background: url('/static/pictures/catalog/catalogBg2.jpg') no-repeat center bottom / cover;
 }
 .recommended__elems_sec .recommended__block_first {
-	background: url('/static/img/catalog/catalogBg3.jpg') no-repeat center bottom / cover;
+	background: url('/static/pictures/catalog/catalogBg3.jpg') no-repeat center bottom / cover;
 }
 .recommended__elems_sec .recommended__block_sec {
-	background: url('/static/img/catalog/catalogBg4.jpg') no-repeat center bottom / cover;
+	background: url('/static/pictures/catalog/catalogBg4.jpg') no-repeat center bottom / cover;
 }
 
 
@@ -481,6 +481,14 @@ margin-bottom: 30px;
 	background: #17CF97;
 	border-radius: 10px;
 	width: 8px;
+	height: 8px;
+}
+
+.quiz__progress_lineActive2 {;
+	position: absolute;
+	background: #17CF97;
+	border-radius: 10px;
+	width: 54%;
 	height: 8px;
 }
 

@@ -1,0 +1,43 @@
+{% extends 'flowers/base.html' %}
+{% load static %}
+{% block content %}
+{% include 'include/nav.html' %}
+	<section id="catalog">
+		<div class="container p100">
+			<div class="catalog">
+				<div class="title">Все букеты</div>
+				{% for page_column in page_columns %}
+					<div class="row mb-2">
+						{% for flowers in page_column %}
+							<div class="col-md-6">
+								<div class="card ficb">
+									<div class="card__block card__block_first">
+										<img src="{{ flowers.image.url }}" alt="img" class="card__img">
+									</div>
+									<div class="card__block card__block_sec">
+										<div class="title">{{ flowers.name }}</div>
+										<div class="card__block_price">{{ flowers.price }} руб</div>
+										<button class="btn largeBtn card__btn" onclick="window.location.href = '{{ flowers.get_absolute_url }}';">Заказать букет</button>
+									</div>
+								</div>
+							</div>
+					{% endfor %}
+					</div>
+                {% endfor %}
+
+			</div>
+		</div>
+	</section>
+	<section id="consultation">
+		<div class="container">
+			<div class="consultation">
+				<div class="title consultation__title">Оставьте заявку на консультацию</div>
+				<form action="#" class="consultation__form">
+					<input type="text" name="fname" class="consultation__form_input" placeholder="Введите Имя" required>
+					<input type="text" name="tel" class="consultation__form_input" placeholder="+ 7 (999) 000 00 00" required>
+					<button type="submit" class="consultation__form_btn">Отправить</button>
+				</form>
+			</div>
+		</div>
+	</section>
+{% endblock %}

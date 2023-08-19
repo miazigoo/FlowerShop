@@ -44,8 +44,8 @@ class Product(models.Model):
     def __str__(self):
         return f'Букет: {self.name}'
 
-
-
+    def get_absolute_url(self):
+        return f'/card/{self.pk}'
 
 
 class Order(models.Model):
@@ -112,9 +112,3 @@ class Order(models.Model):
 
     def __str__(self):
         return f'{self.firstname} {self.phone_number}'
-
-
-
-
-
-

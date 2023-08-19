@@ -116,18 +116,6 @@ def view_flowers(request):
     return render(request, "flowers/index.html", context)
 
 
-def view_success(request):
-    return render(request, "flowers/success.html")
-
-
-def view_cancel(request):
-    return render(request, "flowers/cancel.html")
-
-
-def view_contacts(request):
-    return render(request, "flowers/contacts.html")
-
-
 def view_catalog(request):
     columns_count = 2
     flowers = Product.objects.all()
@@ -238,6 +226,18 @@ class LoginView(View):
             'form': form,
             'ivalid': True,
         })
+
+
+def view_success(request):
+    return render(request, "flowers/success.html")
+
+
+def view_cancel(request):
+    return render(request, "flowers/cancel.html")
+
+
+def view_contacts(request):
+    return render(request, "flowers/contacts.html")
 
 
 class LogoutView(auth_views.LogoutView):

@@ -1,19 +1,35 @@
 import random
-
+import stripe
+from http import HTTPStatus
 from django import forms
 from django.contrib.auth.decorators import user_passes_test
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views import View
 
 from flowers.models import Product, Order, ProductCategory, PriceCategory
 from django.core.paginator import Paginator
 from more_itertools import chunked
 from django.contrib.auth import views as auth_views, authenticate, login
+from django.conf import settings
+from django.views import View
+from django.views.generic.base import TemplateView
 
 
 DATA = {}
 QUIZ = {}
+
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+
+class SuccessView(TemplateView):
+    template_name = "flowers/success.html"
+
+
+class CancelView(TemplateView):
+    template_name = "flowers/cancel.html"
 
 
 def get_product(request):
@@ -69,7 +85,7 @@ def get_product(request):
 
 def view_flowers(request):
     operation = None
-    if request.GET['cardNum']:
+    if request.GET.get('cardNum'):
         product = DATA['product']
         Order.objects.create(
             phone_number=DATA['phone'],
@@ -82,8 +98,34 @@ def view_flowers(request):
         print('SUCCESS')
         operation = 'Оплата прошла успешно. Менеджер свяжется с вами для уточнения заказа.'
         DATA.clear()
+        # checkout_session = stripe.checkout.Session.create(
+        #     line_items=[
+        #         {
+        #             # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+        #             'price': 'price_1Ngt61IOnXKDlGzlxcyrYLxM',
+        #             'quantity': 1,
+        #         },
+        #     ],
+        #     mode='payment',
+        #     success_url='{}{}'.format(settings.DOMAIN_NAME, reverse_lazy('ViewSuccess')),
+        #     cancel_url='{}{}'.format(settings.DOMAIN_NAME, reverse_lazy('ViewCancel')),
+        # )
+        #
+        # return HttpResponseRedirect(checkout_session.url, status=HTTPStatus.SEE_OTHER)
     context = {'operation': operation}
     return render(request, "flowers/index.html", context)
+
+
+def view_success(request):
+    return render(request, "flowers/success.html")
+
+
+def view_cancel(request):
+    return render(request, "flowers/cancel.html")
+
+
+def view_contacts(request):
+    return render(request, "flowers/contacts.html")
 
 
 def view_catalog(request):

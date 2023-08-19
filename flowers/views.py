@@ -41,8 +41,7 @@ def get_product(request):
         if request.GET['FROM'] == '0' and request.GET['UP_TO'] == '0':
             if category:
                 products = Product.objects.filter(category=category)
-                product_pk = random.randint(0, len(products))
-                product = products[product_pk]
+                product = random.choice(products)
             else:
                 products = Product.objects.all().count()
                 product_pk = random.randint(1, products)
@@ -51,33 +50,27 @@ def get_product(request):
             up_to = int(request.GET['UP_TO'])
             if category:
                 products = Product.objects.filter(category=category, price__range=(0, up_to))
-                product_pk = random.randint(0, len(products))
-                product = products[product_pk]
+                product = random.choice(products)
             else:
                 products = Product.objects.filter(price__range=(0, up_to))
-                product_pk = random.randint(0, len(products))
-                product = products[product_pk]
+                product = random.choice(products)
         elif request.GET['FROM'] != '0' and request.GET['UP_TO'] != '0':
             up_to = int(request.GET['UP_TO'])
             from_to = int(request.GET['FROM'])
             if category:
                 products = Product.objects.filter(category=category, price__range=(from_to, up_to))
-                product_pk = random.randint(0, len(products))
-                product = products[product_pk]
+                product = random.choice(products)
             else:
                 products = Product.objects.filter(price__range=(from_to, up_to))
-                product_pk = random.randint(0, len(products))
-                product = products[product_pk]
+                product = random.choice(products)
         elif request.GET['FROM'] != '0' and request.GET['UP_TO'] == '0':
             from_to = int(request.GET['FROM'])
             if category:
                 products = Product.objects.filter(category=category, price__gte=from_to)
-                product_pk = random.randint(0, len(products))
-                product = products[product_pk]
+                product = random.choice(products)
             else:
                 products = Product.objects.filter(price__gte=from_to)
-                product_pk = random.randint(0, len(products))
-                product = products[product_pk]
+                product = random.choice(products)
     except IndexError as err:
         product = None
     return product
@@ -101,7 +94,6 @@ def view_flowers(request):
             product=product,
             price=product.price,
         )
-        print('SUCCESS')
         operation = 'Оплата прошла успешно. Менеджер свяжется с вами для уточнения заказа.'
         DATA.clear()
         # checkout_session = stripe.checkout.Session.create(
@@ -174,13 +166,11 @@ def view_quiz_step(request):
     context = {'cat_prices': cat_prices}
     if request.GET:
         QUIZ['CATEGORY_PK'] = request.GET['CATEGORY_PK']
-    print('CATEGORY_PK', request.GET['CATEGORY_PK'], type(request.GET['CATEGORY_PK']))
     return render(request, "flowers/quiz-step.html", context)
 
 
 def view_result(request):
     product = get_product(request)
-    print(product)
     context = {'product': product}
     QUIZ.clear()
     return render(request, "flowers/result.html", context)

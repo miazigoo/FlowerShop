@@ -121,3 +121,9 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#Stripe
+STRIPE_PUBLIC_KEY = env('STRIPE_PUBLIC_KEY', 'STRIPE_PUBLIC_KEY')
+STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY', 'STRIPE_SECRET_KEY')
+
+DOMAIN_NAME = 'https://127.0.0.1:8000'

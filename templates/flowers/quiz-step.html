@@ -1,0 +1,43 @@
+{% extends 'flowers/base.html' %}
+{% load static %}
+{% block content %}
+{% include 'include/nav.html' %}
+	<section id="quiz">
+		<div class="container">
+			<div class="quiz">
+				<div class="quiz__back ">
+					<a href="#" class="quiz__back_link fic"><img src="{% static 'pictures/arrow-left.svg' %}" alt="arrow-left" class="arrowLeft">
+					<span class="quiz__back_intro" onclick="window.location.href = '{% url 'ViewQuiz' %}';">Назад</span></a>
+				</div>
+				<div class="quiz__block">
+					<h1 class="quiz__title">На какой бюджет рассчитываете?</h1>
+					<div class="quiz__elems fic">
+						{% for cat_price in cat_prices %}
+							<form action="{% url 'ViewResult' %}" class="order__form">
+								<input type="text" name="FROM" hidden value="{%if cat_price.from_price%}{{ cat_price.from_price }}{%else%}0{%endif%}" required>
+								<input type="text" name="UP_TO" hidden value="{%if cat_price.up_to_price%}{{ cat_price.up_to_price }}{%else%}0{%endif%}" required>
+								<button class="quiz__elem"  style="margin-left:3px;">{%if cat_price.from_price%}От {{ cat_price.from_price }} {%endif%} {%if cat_price.up_to_price%} До {{ cat_price.up_to_price }} {%endif%}</button>
+							</form>
+						{% endfor %}
+						<form action="{% url 'ViewResult' %}" class="order__form">
+							<input type="text" name="FROM" hidden value="0" required>
+							<input type="text" name="UP_TO" hidden value="0" required>
+							<button class="quiz__elem">Не имеет значения</button>
+						</form>
+					</div>
+					<div class="quiz__progress">
+						<div class="quiz__progress_step">
+							<span class="quiz__progress_num">1</span>
+							<span class="quiz__progress_in"> шаг из </span>
+							<span class="quiz__progress_num">2</span>
+						</div>
+						<div class="quiz__progress_line">
+							<div class="quiz__progress_lineActive2"></div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</div>
+	</section>
+{% endblock %}

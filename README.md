@@ -24,7 +24,7 @@ git clone https://github.com/miazigoo/FlowerShop.git
 
 Перейдите в каталог проекта:
 ```sh
-cd star-FlowerShop
+cd FlowerShop
 ```
 
 [Установите Python](https://www.python.org/), если этого ещё не сделали.

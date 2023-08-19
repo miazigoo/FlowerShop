@@ -1,0 +1,36 @@
+{% extends 'base_manager_page.html' %}
+
+{% block title %}Необработанные заказы | FlowerShop {% endblock %}
+
+{% block content %}
+  <center>
+    <div class="title">Необработанные заявки на консультацию</div>
+  </center>
+
+  <hr/>
+  <br/>
+  <br/>
+  <div class="container">
+   <table class="table table-responsive">
+    <tr>
+      <th>ID заявки</th>
+      <th>Статус</th>
+      <th>Клиент</th>
+      <th>Телефон</th>
+      <th>Редактировать в админке</th>
+    </tr>
+
+    {% for item in consult_items %}
+      <tr>
+        <td>- {{ item.pk }}</td>
+        <td>- {{ item.get_status_display }}</td>
+        <td>- {{ item.firstname }}</td>
+        <td>- {{ item.phone_number }}</td>
+        <td>
+          <button class="btn" onclick="javascript:window.location.href='{% url 'admin:flowers_consultation_change' object_id=item.pk %}?next={{ request.get_full_path|urlencode }}';">Редактировать</button>
+        </td>
+      </tr>
+    {% endfor %}
+   </table>
+  </div>
+{% endblock %}

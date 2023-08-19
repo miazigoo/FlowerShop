@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views import View
 
-from flowers.models import Product, Order, ProductCategory, PriceCategory
+from flowers.models import Product, Order, ProductCategory, PriceCategory, Consultation
 from django.core.paginator import Paginator
 from more_itertools import chunked
 from django.contrib.auth import views as auth_views, authenticate, login
@@ -85,6 +85,12 @@ def get_product(request):
 
 def view_flowers(request):
     operation = None
+    if request.GET.get('FNAME'):
+        Consultation.objects.create(
+            firstname=request.GET['FNAME'],
+            phone_number=request.GET['TEL'],
+        )
+        operation = 'Заявка зарегистрирована. Менеджер свяжется с вами в течении 20 минут.'
     if request.GET.get('cardNum'):
         product = DATA['product']
         Order.objects.create(
@@ -241,7 +247,7 @@ def view_contacts(request):
 
 
 class LogoutView(auth_views.LogoutView):
-    next_page = reverse_lazy('restaurateur:login')
+    next_page = reverse_lazy('login')
 
 
 def is_manager(user):
@@ -253,3 +259,10 @@ def view_manager(request):
     orders = list(Order.objects.exclude(status=Order.READY).order_by('-status'))
     context = {'order_items': orders}
     return render(request, template_name='order_items.html', context=context)
+
+
+@user_passes_test(is_manager, login_url='login')
+def view_manager_consult(request):
+    consult = list(Consultation.objects.exclude(status=Order.READY))
+    context = {'consult_items': consult}
+    return render(request, template_name='order_consultation.html', context=context)

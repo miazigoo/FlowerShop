@@ -12,12 +12,16 @@
 				<div class="quiz__block">
 					<h1 class="quiz__title">К какому событию нужен букет?</h1>
 					<div class="quiz__elems fic">
-{#						<button class="quiz__elem">Свадьба</button>#}
-                        <button class="quiz__elem" onclick="window.location.href = '{% url 'ViewQuizStep' %}';">Свадьба</button>
-{#						<button class="quiz__elem">День рождения</button>#}
-                        <button class="quiz__elem" onclick="window.location.href = '{% url 'ViewQuizStep' %}';">День рождения</button>
-{#						<button class="quiz__elem">Без повода</button>#}
-                        <button class="quiz__elem" onclick="window.location.href = '{% url 'ViewQuizStep' %}';">Без повода</button>
+						{% for category in categories %}
+							<form action="{% url 'ViewQuizStep' %}" class="order__form">
+								<input type="text" name="CATEGORY_PK" hidden value="{{ category.pk }}" required>
+								<button class="quiz__elem" style="margin-left:3px;">{{ category.name }}</button>
+							</form>
+						{% endfor %}
+						<form action="{% url 'ViewQuizStep' %}" class="order__form">
+							<input type="text" name="CATEGORY_PK" hidden value="0" required>
+                        	<button class="quiz__elem" style="margin-left:3px;">Без повода</button>
+						</form>
 					</div>
 					<div class="quiz__progress">
 						<div class="quiz__progress_step">

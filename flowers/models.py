@@ -26,9 +26,10 @@ class ProductCategory(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=256)
-    description = models.TextField()
+    description = models.TextField("Описание")
+    short_description = models.TextField("Короткое описание", null=True, blank=True)
     price = models.DecimalField(max_digits=6, decimal_places=2)
-    quantity = models.PositiveIntegerField(default=0)
+    structure = models.TextField("Состав", null=True, blank=True)
     image = models.ImageField(upload_to='pictures')
     category = models.ManyToManyField(
         ProductCategory,

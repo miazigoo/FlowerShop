@@ -12,14 +12,18 @@
 				<div class="quiz__block">
 					<h1 class="quiz__title">На какой бюджет рассчитываете?</h1>
 					<div class="quiz__elems fic">
-{#						<button class="quiz__elem">До 1 000 руб</button>#}
-                        <button class="quiz__elem" onclick="window.location.href = '{% url 'ViewResult2' %}';">До 1 000 руб</button>
-{#						<button class="quiz__elem">1 000 - 5 000 руб</button>#}
-                        <button class="quiz__elem" onclick="window.location.href = '{% url 'ViewResult' %}';">1 000 - 5 000 руб</button>
-{#						<button class="quiz__elem">от 5 000 руб</button>#}
-                        <button class="quiz__elem" onclick="window.location.href = '{% url 'ViewResult' %}';">от 5 000 руб</button>
-{#						<button class="quiz__elem">Не имеет значения</button>#}
-                        <button class="quiz__elem" onclick="window.location.href = '{% url 'ViewResult' %}';">Не имеет значения</button>
+						{% for cat_price in cat_prices %}
+							<form action="{% url 'ViewResult' %}" class="order__form">
+								<input type="text" name="FROM" hidden value="{%if cat_price.from_price%}{{ cat_price.from_price }}{%else%}0{%endif%}" required>
+								<input type="text" name="UP_TO" hidden value="{%if cat_price.up_to_price%}{{ cat_price.up_to_price }}{%else%}0{%endif%}" required>
+								<button class="quiz__elem"  style="margin-left:3px;">{%if cat_price.from_price%}От {{ cat_price.from_price }} {%endif%} {%if cat_price.up_to_price%} До {{ cat_price.up_to_price }} {%endif%}</button>
+							</form>
+						{% endfor %}
+						<form action="{% url 'ViewResult' %}" class="order__form">
+							<input type="text" name="FROM" hidden value="0" required>
+							<input type="text" name="UP_TO" hidden value="0" required>
+							<button class="quiz__elem">Не имеет значения</button>
+						</form>
 					</div>
 					<div class="quiz__progress">
 						<div class="quiz__progress_step">

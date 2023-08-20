@@ -1,11 +1,9 @@
 {% extends 'flowers/base.html' %}
 {% load static %}
 {% block content %}
-{% if operation %}
-	<div class="alert alert-success" role="alert">
-		{{ operation }}
-	</div>
-    {% endif %}
+
+{% include 'include/nav.html' %}
+
 	<section id="contacts">
 		<div class="container">
 			<div class="contacts">
@@ -32,5 +30,18 @@
 				</div>
             </div>
         </div>
+	</section>
+	<section id="consultation">
+		<div class="container">
+			<div class="consultation">
+				<div class="title consultation__title">Оставьте заявку на консультацию</div>
+				<form action="{% url 'ViewFlowers' %}" class="consultation__form">
+					<input type="text" name="FNAME" class="consultation__form_input" placeholder="Введите Имя" required>
+					<input type="text" name="TEL" class="consultation__form_input" placeholder="+ 7 (999) 000 00 00" required>
+					<button type="submit" class="consultation__form_btn">Отправить</button>
+				</form>
+			</div>
+		</div>
+	</section>
 
 {% endblock %}

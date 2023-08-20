@@ -4,11 +4,12 @@ from http import HTTPStatus
 
 from django import forms
 from django.contrib.auth.decorators import user_passes_test
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.views import View
 
-from flowers.models import Product, Order, ProductCategory, PriceCategory
+from flowers.models import Product, Order, ProductCategory, PriceCategory, Consultation
 from django.core.paginator import Paginator
 from more_itertools import chunked
 from django.contrib.auth import views as auth_views, authenticate, login
@@ -31,6 +32,17 @@ class CancelView(TemplateView):
     template_name = "flowers/cancel.html"
 
 
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+
+class SuccessView(TemplateView):
+    template_name = "flowers/success.html"
+
+
+class CancelView(TemplateView):
+    template_name = "flowers/cancel.html"
+
+
 def get_product(request):
     category = None
     product = None
@@ -40,8 +52,7 @@ def get_product(request):
         if request.GET['FROM'] == '0' and request.GET['UP_TO'] == '0':
             if category:
                 products = Product.objects.filter(category=category)
-                product_pk = random.randint(0, len(products))
-                product = products[product_pk]
+                product = random.choice(products)
             else:
                 products = Product.objects.all().count()
                 product_pk = random.randint(1, products)
@@ -50,33 +61,27 @@ def get_product(request):
             up_to = int(request.GET['UP_TO'])
             if category:
                 products = Product.objects.filter(category=category, price__range=(0, up_to))
-                product_pk = random.randint(0, len(products))
-                product = products[product_pk]
+                product = random.choice(products)
             else:
                 products = Product.objects.filter(price__range=(0, up_to))
-                product_pk = random.randint(0, len(products))
-                product = products[product_pk]
+                product = random.choice(products)
         elif request.GET['FROM'] != '0' and request.GET['UP_TO'] != '0':
             up_to = int(request.GET['UP_TO'])
             from_to = int(request.GET['FROM'])
             if category:
                 products = Product.objects.filter(category=category, price__range=(from_to, up_to))
-                product_pk = random.randint(0, len(products))
-                product = products[product_pk]
+                product = random.choice(products)
             else:
                 products = Product.objects.filter(price__range=(from_to, up_to))
-                product_pk = random.randint(0, len(products))
-                product = products[product_pk]
+                product = random.choice(products)
         elif request.GET['FROM'] != '0' and request.GET['UP_TO'] == '0':
             from_to = int(request.GET['FROM'])
             if category:
                 products = Product.objects.filter(category=category, price__gte=from_to)
-                product_pk = random.randint(0, len(products))
-                product = products[product_pk]
+                product = random.choice(products)
             else:
                 products = Product.objects.filter(price__gte=from_to)
-                product_pk = random.randint(0, len(products))
-                product = products[product_pk]
+                product = random.choice(products)
     except IndexError as err:
         product = None
     return product
@@ -84,6 +89,14 @@ def get_product(request):
 
 def view_flowers(request):
     operation = None
+
+    if request.GET.get('FNAME'):
+        Consultation.objects.create(
+            firstname=request.GET['FNAME'],
+            phone_number=request.GET['TEL'],
+        )
+        operation = 'Заявка зарегистрирована. Менеджер свяжется с вами в течении 20 минут.'
+
     if request.GET.get('cardNum'):
         product = DATA['product']
         Order.objects.create(
@@ -94,9 +107,22 @@ def view_flowers(request):
             product=product,
             price=product.price,
         )
-        print('SUCCESS')
         operation = 'Оплата прошла успешно. Менеджер свяжется с вами для уточнения заказа.'
         DATA.clear()
+        # checkout_session = stripe.checkout.Session.create(
+        #     line_items=[
+        #         {
+        #             # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+        #             'price': 'price_1Ngt61IOnXKDlGzlxcyrYLxM',
+        #             'quantity': 1,
+        #         },
+        #     ],
+        #     mode='payment',
+        #     success_url='{}{}'.format(settings.DOMAIN_NAME, reverse_lazy('ViewSuccess')),
+        #     cancel_url='{}{}'.format(settings.DOMAIN_NAME, reverse_lazy('ViewCancel')),
+        # )
+        #
+        # return HttpResponseRedirect(checkout_session.url, status=HTTPStatus.SEE_OTHER)
     context = {'operation': operation}
     return render(request, "flowers/index.html", context)
 
@@ -192,13 +218,11 @@ def view_quiz_step(request):
     context = {'cat_prices': cat_prices}
     if request.GET:
         QUIZ['CATEGORY_PK'] = request.GET['CATEGORY_PK']
-    print('CATEGORY_PK', request.GET['CATEGORY_PK'], type(request.GET['CATEGORY_PK']))
     return render(request, "flowers/quiz-step.html", context)
 
 
 def view_result(request):
     product = get_product(request)
-    print(product)
     context = {'product': product}
     QUIZ.clear()
     return render(request, "flowers/result.html", context)
@@ -256,8 +280,20 @@ class LoginView(View):
         })
 
 
+def view_success(request):
+    return render(request, "flowers/success.html")
+
+
+def view_cancel(request):
+    return render(request, "flowers/cancel.html")
+
+
+def view_contacts(request):
+    return render(request, "flowers/contacts.html")
+
+
 class LogoutView(auth_views.LogoutView):
-    next_page = reverse_lazy('restaurateur:login')
+    next_page = reverse_lazy('login')
 
 
 def is_manager(user):
@@ -269,3 +305,10 @@ def view_manager(request):
     orders = list(Order.objects.exclude(status=Order.READY).order_by('-status'))
     context = {'order_items': orders}
     return render(request, template_name='order_items.html', context=context)
+
+
+@user_passes_test(is_manager, login_url='login')
+def view_manager_consult(request):
+    consult = list(Consultation.objects.exclude(status=Order.READY))
+    context = {'consult_items': consult}
+    return render(request, template_name='order_consultation.html', context=context)

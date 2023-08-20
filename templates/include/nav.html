@@ -3,11 +3,22 @@
 			<div class="container">
 				<div class="header ficb">
 					<a href="/"><img src="{% static 'pictures/logo.svg' %}" alt="logo" class="logo"></a>
+					{% if request.user.is_authenticated %}
+						<div class="ficc">
+							<div class="menu__item"><a href="{% url 'logout' %}" class="menu__item_link">Выйти</a></div>
+							<div class="menu__item"><a href="{% url 'ManagerView' %}" class="menu__item_link">Заказы</a></div>
+							<div class="menu__item"><a href="{% url 'ManagerConsultationView' %}" class="menu__item_link">Консультации</a></div>
+						</div>
+					{% else %}
+						<div class="ficc">
+							<div class="menu__item"><a href="{% url 'login' %}" class="menu__item_link">Вход для менеджера</a></div>
+						</div>
+					{% endif %}
 					<nav>
 						<ul class="menu ficc">
 							<li class="menu__item"><a href="{% url 'ViewCatalog' %}" class="menu__item_link">Каталог</a></li>
 							<li class="menu__item"><a href="{% url 'ViewQuiz' %}" class="menu__item_link">Рекомендации</a></li>
-							<li class="menu__item"><a href="#" class="menu__item_link">Контакты</a></li>
+							<li class="menu__item"><a href="{% url 'ViewContacts' %}" class="menu__item_link">Контакты</a></li>
 						</ul>
 					</nav>
 				</div>

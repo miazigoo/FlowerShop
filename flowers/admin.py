@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.http import HttpResponseRedirect
 
-from flowers.models import Product, Order, ProductCategory, PriceCategory
+from flowers.models import Product, Order, ProductCategory, PriceCategory, Consultation
 
 
 @admin.register(ProductCategory)
@@ -32,7 +32,7 @@ class OrderAdmin(admin.ModelAdmin):
     readonly_fields = ['registration_date']
 
     def response_change(self, request, obj):
-        res = super(OrderAdmin, self).response_post_save_change(request, obj)
+        res = super().response_post_save_change(request, obj)
         if "next" in request.GET:
             return HttpResponseRedirect(request.GET['next'])
         else:
@@ -45,3 +45,23 @@ class OrderAdmin(admin.ModelAdmin):
         'name',
         'price',
     ]
+
+
+@admin.register(Consultation)
+class ConsultationAdmin(admin.ModelAdmin):
+    search_fields = [
+        'firstname',
+        'phone_number',
+    ]
+    list_display = [
+        'firstname',
+        'phone_number',
+    ]
+    readonly_fields = ['registration_date']
+
+    def response_change(self, request, obj):
+        res = super().response_post_save_change(request, obj)
+        if "next" in request.GET:
+            return HttpResponseRedirect(request.GET['next'])
+        else:
+            return res

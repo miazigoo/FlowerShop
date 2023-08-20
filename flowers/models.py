@@ -44,8 +44,8 @@ class Product(models.Model):
     def __str__(self):
         return f'Букет: {self.name}'
 
-
-
+    def get_absolute_url(self):
+        return f'/card/{self.pk}'
 
 
 class Order(models.Model):
@@ -114,7 +114,41 @@ class Order(models.Model):
         return f'{self.firstname} {self.phone_number}'
 
 
+class Consultation(models.Model):
+    NEW = 'new'
+    READY = 'ready'
+    ORDER_STATUS = [
+        (NEW, 'Необработан'),
+        (READY, 'Готов'),
+    ]
+    status = models.CharField(
+        'Статус заказа',
+        choices=ORDER_STATUS,
+        default=NEW,
+        max_length=20,
+        db_index=True, null=True
+    )
+    firstname = models.CharField(
+        'Имя',
+        max_length=90, null=True
+    )
+    phone_number = PhoneNumberField(
+        verbose_name='Телефон',
+        db_index=True, null=True
+    )
+    registration_date = models.DateTimeField(
+        blank=True, null=True, verbose_name='Дата регистрации', db_index=True, auto_now=True
+    )
+    call_date = models.DateTimeField(
+        blank=True, null=True, verbose_name='Дата звонка', db_index=True
+    )
+    comment = models.TextField(
+        blank=True, null=True, verbose_name='Комментарий к заявке'
+    )
 
+    class Meta:
+        verbose_name = 'Заявку на консультацию'
+        verbose_name_plural = 'Заявки на консультации'
 
-
-
+    def __str__(self):
+        return f'{self.firstname} {self.phone_number}'

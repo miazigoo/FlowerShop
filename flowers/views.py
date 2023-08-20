@@ -109,20 +109,6 @@ def view_flowers(request):
         )
         operation = 'Оплата прошла успешно. Менеджер свяжется с вами для уточнения заказа.'
         DATA.clear()
-        # checkout_session = stripe.checkout.Session.create(
-        #     line_items=[
-        #         {
-        #             # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-        #             'price': 'price_1Ngt61IOnXKDlGzlxcyrYLxM',
-        #             'quantity': 1,
-        #         },
-        #     ],
-        #     mode='payment',
-        #     success_url='{}{}'.format(settings.DOMAIN_NAME, reverse_lazy('ViewSuccess')),
-        #     cancel_url='{}{}'.format(settings.DOMAIN_NAME, reverse_lazy('ViewCancel')),
-        # )
-        #
-        # return HttpResponseRedirect(checkout_session.url, status=HTTPStatus.SEE_OTHER)
     context = {'operation': operation}
     return render(request, "flowers/index.html", context)
 
@@ -156,38 +142,20 @@ def view_order(request):
         product = get_object_or_404(Product, pk=pk)
         DATA['product'] = product
 
-        checkout_session = stripe.checkout.Session.create(
-            line_items=[
-                {
-                    # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-                    'price': 'price_1Ngt61IOnXKDlGzlxcyrYLxM',
-                    'quantity': 1,
-                },
-            ],
-            mode='payment',
-            success_url='{}{}'.format(settings.DOMAIN, reverse_lazy('flowers:view_success')),
-            cancel_url='{}{}'.format(settings.DOMAIN, reverse_lazy('flowers:view_cancel')),
-        )
-        return HttpResponseRedirect(checkout_session.url, status=HTTPStatus.SEE_OTHER)
+        # checkout_session = stripe.checkout.Session.create(
+        #     line_items=[
+        #         {
+        #             # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
+        #             'price': 'price_1Ngt61IOnXKDlGzlxcyrYLxM',
+        #             'quantity': 1,
+        #         },
+        #     ],
+        #     mode='payment',
+        #     success_url='{}{}'.format(settings.DOMAIN_NAME, reverse_lazy('flowers:view_success')),
+        #     cancel_url='{}{}'.format(settings.DOMAIN_NAME, reverse_lazy('flowers:view_cancel')),
+        # )
+        # return HttpResponseRedirect(checkout_session.url, status=HTTPStatus.SEE_OTHER)
     return render(request, "flowers/order.html")
-
-
-# class CreateCheckoutSessionView(View):
-#     def post(self, request, *args, **kwargs):
-#         super(CreateCheckoutSessionView, self).post(request, *args, **kwargs)
-#         checkout_session = stripe.checkout.Session.create(
-#             line_items=[
-#                 {
-#                     # Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-#                     'price': 'price_1Ngt61IOnXKDlGzlxcyrYLxM',
-#                     'quantity': 1,
-#                 },
-#             ],
-#             mode='payment',
-#             success_url='{}{}'.format(settings.DOMAIN, reverse_lazy('flowers:view_success')),
-#             cancel_url='{}{}'.format(settings.DOMAIN, reverse_lazy('flowers:view_cancel')),
-#         )
-#         return HttpResponseRedirect(checkout_session.url, status=HTTPStatus.SEE_OTHER )
 
 
 def view_success(request):

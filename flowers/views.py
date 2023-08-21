@@ -1,27 +1,22 @@
 import random
 import stripe
-from http import HTTPStatus
 
 from django import forms
 from django.contrib.auth.decorators import user_passes_test
-from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy, reverse
-from django.views import View
+from django.urls import reverse_lazy
 
 from flowers.models import Product, Order, ProductCategory, PriceCategory, Consultation
-from django.core.paginator import Paginator
+
 from more_itertools import chunked
 from django.contrib.auth import views as auth_views, authenticate, login
-from django.conf import settings
+# from django.conf import settings
 from django.views import View
 from django.views.generic.base import TemplateView
 
 
 DATA = {}
 QUIZ = {}
-
-stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 class SuccessView(TemplateView):
@@ -32,7 +27,7 @@ class CancelView(TemplateView):
     template_name = "flowers/cancel.html"
 
 
-stripe.api_key = settings.STRIPE_SECRET_KEY
+# stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 class SuccessView(TemplateView):
